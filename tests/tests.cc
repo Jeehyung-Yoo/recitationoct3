@@ -58,11 +58,10 @@ TEST_CASE("Example: Simple widthdraw/deposit", "[ex-2]") {
   Atm atm;
   atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 300.30);
   atm.WithdrawCash(12345678, 1234, 20);
-  atm.DepositCash(12345678, 1234, 500);
   auto accounts = atm.GetAccounts();
   Account sam_account = accounts[{12345678, 1234}];
 
-  REQUIRE(sam_account.balance == 780.30);
+  REQUIRE(sam_account.balance == 280.30);
   REQUIRE_THROWS_AS(atm.WithdrawCash(12345678, 1234, -500),
                     std::invalid_argument);
   REQUIRE_THROWS_AS(atm.WithdrawCash(12345678, 1234, 500), std::runtime_error);
@@ -71,6 +70,15 @@ TEST_CASE("Example: Simple widthdraw/deposit", "[ex-2]") {
   REQUIRE_THROWS_AS(atm.DepositCash(12345678, 1234, -500),
                     std::invalid_argument);
   REQUIRE_THROWS_AS(atm.DepositCash(10293847, 1029, 20), std::invalid_argument);
+}
+
+TEST_CASE("Deposit check", "[ex-2d]") {
+  Atm atm;
+  atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 300.30);
+  atm.DepositCash(12345678, 1234, 200);
+  auto accounts = atm.GetAccounts();
+  Account sam_account = accounts[{12345678, 1234}];
+  REQUIRE(sam_account.balance == 500.30);
 }
 
 TEST_CASE("Example: Print Prompt Ledger", "[ex-3]") {
